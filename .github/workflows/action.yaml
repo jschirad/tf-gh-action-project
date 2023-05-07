@@ -11,13 +11,13 @@ on:
         required: false
         default: default
       repo_visibility:
-        description: Visibility of the new repository (private/public)
+        description: Visibility (private/public)
         required: true
       template_owner:
         description: Owner of the template repository
         required: true
       template_repository:
-        description: 'Name of the template repository'
+        description: Name of the template repository
         required: true
 jobs:
   terraform:
