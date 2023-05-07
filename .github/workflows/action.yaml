@@ -1,0 +1,46 @@
+name: Terraform + Github 
+
+on:
+  workflow_dispatch:
+    inputs:
+      repo_name:
+        description: Name of the new repository
+        required: true
+      repo_description:
+        description: Description of the new repository
+        required: false
+        default: default
+      repo_visibility:
+        description: Visibility of the new repository (private/public)
+        required: true
+      template_owner:
+        description: Owner of the template repository
+        required: true
+      template_repository:
+        description: 'Name of the template repository'
+        required: true
+jobs:
+  terraform:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@v1
+      with:
+        terraform_version: 1.0.0
+
+    - name: Terraform Initialize
+      run: terraform init
+
+    - name: Terraform Validate
+      run: terraform validate
+
+    - name: Terraform Plan
+      run: terraform plan -var="github_token=${{ secrets.GITHUB_TOKEN }}" -var="github_owner=${{ github.repository_owner }}" -var="repo_name=${{ inputs.repo_name }}" -var="repo_description=${{ inputs.repo_description }}" -var="repo_visibility=${{ inputs.repo_visibility }}" -var="template_owner=${{ inputs.template_owner }}" -var="template_repository=${{ inputs.template_repository }}"
+
+    - name: Terraform Apply
+      if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+      run: terraform apply -auto-approve
