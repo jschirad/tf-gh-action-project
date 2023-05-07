@@ -39,8 +39,8 @@ jobs:
       run: terraform validate
 
     - name: Terraform Plan
-      run: terraform plan -var="github_token=${{ secrets.PAT }}" -var="github_owner=${{ github.repository_owner }}" -var="repo_name=${{ inputs.repo_name }}" -var="repo_description=${{ inputs.repo_description }}" -var="repo_visibility=${{ inputs.repo_visibility }}" -var="template_owner=${{ inputs.template_owner }}" -var="template_repository=${{ inputs.template_repository }}"
+      run: terraform apply -var="github_token=${{ secrets.PAT }}" -var="github_owner=${{ github.repository_owner }}" -var="repo_name=${{ inputs.repo_name }}" -var="repo_description=${{ inputs.repo_description }}" -var="repo_visibility=${{ inputs.repo_visibility }}" -var="template_owner=${{ inputs.template_owner }}" -var="template_repository=${{ inputs.template_repository }}" -auto-approve
 
-    - name: Terraform Apply
+    #- name: Terraform Apply
       #if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-      run: terraform apply -auto-approve
+      #run: terraform apply -auto-approve
